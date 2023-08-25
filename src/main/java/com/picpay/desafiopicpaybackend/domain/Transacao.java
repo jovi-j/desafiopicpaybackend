@@ -19,13 +19,6 @@ import lombok.NoArgsConstructor;
 @Table(name = "transacoes")
 public class Transacao {
 
-    public Transacao(Usuario remetente, Usuario destinatario, BigDecimal valor) {
-        this.remetente = remetente;
-        this.destinatario = destinatario;
-        this.valor = valor;
-        this.timestamp = LocalDateTime.now();
-    }
-
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
