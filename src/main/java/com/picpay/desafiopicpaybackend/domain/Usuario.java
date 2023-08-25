@@ -4,14 +4,18 @@ import com.picpay.desafiopicpaybackend.domain.enums.TipoUsuario;
 import com.picpay.desafiopicpaybackend.dtos.UsuarioDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 
 @Entity(name = "usuario")
 @Table(name = "usuarios")
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode(of = { "id", "documento", "email" })
 @AllArgsConstructor
 @NoArgsConstructor
 public class Usuario {
