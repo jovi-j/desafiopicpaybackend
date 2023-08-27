@@ -1,11 +1,13 @@
 package com.picpay.desafiopicpaybackend.services;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.picpay.desafiopicpaybackend.domain.Transacao;
 import com.picpay.desafiopicpaybackend.domain.Usuario;
 import com.picpay.desafiopicpaybackend.domain.enums.TipoUsuario;
-import com.picpay.desafiopicpaybackend.dtos.TransacaoDTO;
+import com.picpay.desafiopicpaybackend.dtos.Transacao.*;
 import com.picpay.desafiopicpaybackend.repositories.TransacaoRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,15 +25,27 @@ public class TransacaoService {
     @Autowired
     private UsuarioService usuarioService;
 
-    public List<Transacao> findTransacoesByRemetente(Long idRemetente) {
-        return transacaoRepository.findAllTransacaoByRemetente_Id(idRemetente).orElseThrow();
+    public List<TransacaoViewDTO> findTransacoesByRemetente(Long idRemetente) {
+        return transacaoListToTransacaoViewDTOList(
+                transacaoRepository.findAllTransacaoByRemetente_Id(idRemetente).orElseThrow());
     }
 
-    public List<Transacao> findTransacoesByDestinatario(Long idDestinatario) {
-        return transacaoRepository.findAllTransacaoByDestinatario_Id(idDestinatario).orElseThrow();
+    public List<TransacaoViewDTO> findTransacoesByDestinatario(Long idDestinatario) {
+        return transacaoListToTransacaoViewDTOList(
+                transacaoRepository.findAllTransacaoByDestinatario_Id(idDestinatario).orElseThrow());
     }
 
-    public Transacao salvarTransacao(TransacaoDTO dto) throws Exception {
+    public List<TransacaoViewDTO> findTransacoesByDestinatarioDoc(String documento) {
+        Long idDestinatario = usuarioService.findByDocumento(documento).getId();
+        Optional<List<Transacao>> listaOpt = transacaoRepository.findAllTransacaoByDestinatario_Id(idDestinatario);
+        if (listaOpt.isPresent()) {
+            return transacaoListToTransacaoViewDTOList(listaOpt.get());
+        }
+
+        return new ArrayList<TransacaoViewDTO>();
+    }
+
+    public TransacaoViewDTO salvarTransacao(TransacaoDTO dto) throws Exception {
         Transacao newTransacao = new Transacao();
 
         Usuario remetente = usuarioService.findById(dto.remetenteId());
@@ -40,11 +54,13 @@ public class TransacaoService {
         newTransacao.setRemetente(remetente);
         newTransacao.setDestinatario(destinatario);
 
+        newTransacao.setValor(dto.valor());
+
         validarTransacao(newTransacao);
 
         transacaoRepository.save(newTransacao);
 
-        return newTransacao;
+        return new TransacaoViewDTO(newTransacao);
     }
 
     public void validarTransacao(Transacao transacao) throws Exception {
@@ -63,5 +79,14 @@ public class TransacaoService {
             throw new Exception("Erro: O Usuário não pode realizar transferência para si mesmo.");
         }
 
+    }
+
+    public TransacaoViewDTO findTransacaoById(Long id) {
+        Transacao t = transacaoRepository.findById(id).orElseThrow();
+        return new TransacaoViewDTO(t);
+    }
+
+    private List<TransacaoViewDTO> transacaoListToTransacaoViewDTOList(List<Transacao> lista) {
+        return lista.stream().map(TransacaoViewDTO::new).toList();
     }
 }
