@@ -1,7 +1,7 @@
 package com.picpay.desafiopicpaybackend.domain;
 
 import com.picpay.desafiopicpaybackend.domain.enums.TipoUsuario;
-import com.picpay.desafiopicpaybackend.dtos.UsuarioDTO;
+import com.picpay.desafiopicpaybackend.dtos.Usuario.UsuarioDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
