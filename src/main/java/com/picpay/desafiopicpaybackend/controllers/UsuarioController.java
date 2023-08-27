@@ -2,6 +2,7 @@ package com.picpay.desafiopicpaybackend.controllers;
 
 import java.util.List;
 import com.picpay.desafiopicpaybackend.domain.Usuario;
+import com.picpay.desafiopicpaybackend.dtos.Usuario.UsuarioViewDTO;
 import com.picpay.desafiopicpaybackend.services.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,8 +24,8 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public Usuario criarUsuario(@RequestBody Usuario usuario) {
-        return usuarioService.saveUsuario(usuario);
+    public UsuarioViewDTO criarUsuario(@RequestBody final Usuario usuario) {
+        return new UsuarioViewDTO(usuarioService.saveUsuario(usuario));
     }
 
 }
