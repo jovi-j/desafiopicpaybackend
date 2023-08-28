@@ -5,6 +5,7 @@ import com.picpay.desafiopicpaybackend.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -12,7 +13,6 @@ public class UsuarioService {
 
     @Autowired
     private UsuarioRepository repository;
-
 
     public List<Usuario> findAllUsuarios() {
         return repository.findAll();
@@ -28,5 +28,10 @@ public class UsuarioService {
 
     public Usuario saveUsuario(Usuario usuario) {
         return repository.save(usuario);
+    }
+
+    public void subtrairSaldo(Usuario remetente, BigDecimal valor) {
+        remetente.setSaldo(remetente.getSaldo().subtract(valor));
+        repository.save(remetente);
     }
 }

@@ -2,7 +2,6 @@ package com.picpay.desafiopicpaybackend.controllers;
 
 import java.util.List;
 
-import com.picpay.desafiopicpaybackend.domain.Transacao;
 import com.picpay.desafiopicpaybackend.dtos.Transacao.*;
 import com.picpay.desafiopicpaybackend.services.TransacaoService;
 

@@ -58,6 +58,8 @@ public class TransacaoService {
 
         validarTransacao(newTransacao);
 
+        usuarioService.subtrairSaldo(remetente, newTransacao.getValor());
+
         transacaoRepository.save(newTransacao);
 
         return new TransacaoViewDTO(newTransacao);
